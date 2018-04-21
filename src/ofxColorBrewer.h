@@ -15,7 +15,21 @@ public:
 
   ~ofxColorBrewer(){};  
 
-  vector<string> get(string id, int qty)
+  vector<ofColor> get(string id, int qty)
+  {
+    vector<string> strs = _get(id, qty);
+    vector<ofColor> cols;
+    for (auto& c : strs)
+      cols.push_back(ofColor::fromHex(ofHexToInt(c)));
+    return cols;
+  };
+
+private:
+
+  ofxJSONElement json;
+  bool inited;
+
+  vector<string> _get(string id, int qty)
   {
     if ( ! inited ) 
       parse( colors );
@@ -34,12 +48,7 @@ public:
 
     return ls;
 
-  };
-
-private:
-
-  ofxJSONElement json;
-  bool inited;
+  }; 
 
   void parse( string jsonstr )
   {
